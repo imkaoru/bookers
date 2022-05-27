@@ -1,0 +1,59 @@
+<% if flash[:notice] %>
+  <p id = "notice"><%= flash[:notice] %></p>
+<% end %>
+
+<div class="books-container">
+  <h1 class="h1-title">Books</h1>
+
+  <% if not @count == 0 %>
+    <table class="books-table">
+      <tr>
+        <th>Title</th><th>Body</th><th></th><th></th><th></th>
+      </tr>
+
+      <% @books.each do |book| %>
+        <tr>
+          <td class="book-title"><%= book.title %></td>
+          <td class="book-body"><%= book.body %></td>
+          <td><%= link_to "Show", book_path(book.id) %></td>
+          <td><%= link_to "Edit", edit_book_path(book.id) %></td>
+          <td><%= link_to "Destroy", book_path(book.id), method: :delete, "data-confirm" => "Are you sure?" %></td>
+        </tr>
+      <% end %>
+    </table>
+  <% else %>
+    <p>No books have been registered yet.</p>
+  <% end %>
+</div>
+
+<div class="create-container">
+  <h2 class="h2-title">New Book</h2>
+
+  <% if @book.errors.any? %>
+    <div class="errors-box">
+      <p><%= @book.errors.count %> errors prohibited this book from being saved:</p>
+
+      <ul>
+      <% @book.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: @book, url: books_path do |f| %>
+    <div class="form-box">
+      <h4 class="form-box-title">Title</h4>
+      <%= f.text_field :title, autocomplete: 'off' %>
+    </div>
+
+    <div class="form-box">
+      <h4 class="form-box-title">Body</h4>
+      <%= f.text_area :body %>
+    </div>
+
+    <div class="form-box">
+      <%= f.submit 'Create Book' %>
+    </div>
+  <% end %>
+</div>
